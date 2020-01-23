@@ -3,9 +3,10 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-import os
+import pickle
 
-class DisneyLand(object):
+
+class DisneyLand_links(object):
     def __init__(self):
         self.domain = 'https://www.disneylandparis.com/fr-fr/faq'
         self.url = self.domain + '/parcs-a-theme/'    
@@ -13,22 +14,37 @@ class DisneyLand(object):
         html = requests.get(self.url).text
         self.soup = BeautifulSoup(html, 'lxml')   
     def parseList(self):
-        listQuestion = self.soup.find('div', {'class': 'topics-list help-listing'})
-        FAQ = []        
-        for i in listQuestion.find_all('article', {'class': 'topic'}, limit= 77):
-            faq = {}
-            faq['question'] = i.select_one('div.question > div:nth-of-type(2)').text
-            faq['reponse'] = i.select_one('div.answer > div:nth-of-type(2)').text
-            FAQ.append(faq)
-        return FAQ
-    def cleanHTML(self, data):
-        props = ['\t', '\n', '\r']
-        for p in props:
-            data = data.replace(p, '')
-        return data
+        listFAQ = self.soup.find('div', {'class': 'topics-list help-listing'})
+        links = []        
+        for i in listFAQ.find_all('a', {'class': 'help-link-container'}, limit= 77):
+            link = i.get('href')
+            links.append(link)
+        return links
 
+def DisneyLand(url):
+    html = requests.get(url).text
+    data = BeautifulSoup(html, 'lxml') 
+    faq = {}
+    faq['question'] = data.select_one('div.question > div:nth-of-type(2)').text
+    faq['reponse'] = data.select_one('div.answer > div:nth-of-type(2)').text
+    return faq
+
+def cleanHTML(data):
+    props = ['\xa0', '\n']
+    for p in props:
+        data = data.replace(p, ' ')
+    return data
     
-dl = DisneyLand()
-dl.getData()
-parsedJson = json.dumps(dl.parseList(), ensure_ascii=False)
-print(dl.cleanHTML(parsedJson))
+dl_a = DisneyLand_links()
+dl_a.getData()
+links = dl_a.parseList()
+del links[10]
+
+FAQ = []
+for i in links :
+    faq = DisneyLand(i)
+    faq['reponse'] = cleanHTML(faq['reponse'])
+    FAQ.append(faq)
+
+with open('faq.pkl', 'wb') as f:
+    pickle.dump(FAQ, f)
