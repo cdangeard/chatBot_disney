@@ -43,6 +43,7 @@ del links[10]
 FAQ = []
 for i in links :
     faq = DisneyLand(i)
+    faq['question'] = cleanHTML(faq['question'])
     faq['reponse'] = cleanHTML(faq['reponse'])
     FAQ.append(faq)
 
