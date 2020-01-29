@@ -2,23 +2,23 @@
 
 from botSpecialist import botSpecialist
 
-class classifier:
+class botGeneral:
     def __init__(self):
         pass
     
-    def is_myJob(self,q):
-        return True
+    def repond(self,q):
+        return 'bitch'
 
 class disneyChatBot:
     
     def __init__(self):
-        self.classifier = classifier()
         self.botSpecialist = botSpecialist()
-        self.botGeneral = None
+        self.botGeneral = botGeneral()
         
     def repond(self, question):
-        if self.classifier.is_myJob(question):
-            return self.botSpecialist.repond(question)
+        reponseSpe = self.botSpecialist.repond(question)
+        if reponseSpe:
+            return reponseSpe
         else:
             return self.botGeneral.repond(question)
             
