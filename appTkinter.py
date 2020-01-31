@@ -62,5 +62,5 @@ class App():
         self.my_msg.set("{quit}")
         self.send()
     
-
-app = App(disneyChatBot())
+if __name__ == '__main__':
+    App(disneyChatBot())
