@@ -4,17 +4,23 @@ import pickle
 import numpy as np
 import re
 
+
+#Bot répondant d'apres un modele préentrainé importé en entree
 class botGeneral:
         
     def __init__(self, filenameModel = 'data/last_model.h5', filenameVocab = 'data/vocab.pickle', sizeMaxReponse = 100, temperature = 1.0):
         self.model = tf.keras.models.load_model(filenameModel)
         self.temperature = temperature
         self.sizeMaxReponse = sizeMaxReponse
+        #On se sert du vocab pour identifié des caractères à des entiers à
+        #l'aide d'une table
         with open(filenameVocab, 'rb') as file:
             vocab = pickle.load(file)
             self.char2idx = {u:i for i, u in enumerate(vocab)}
             self.idx2char = np.array(vocab)
     
+    #Une fonction pour mettre en forme le texte et suprimer certains caracteres
+    #non adaptés au modèle.
     def pre_process(self, text):
           text = (text.replace("\n-","")
                  .replace("\n",".")
@@ -36,10 +42,13 @@ class botGeneral:
           text = re.sub(regex , r" " , text)
           return text
     
+    #fourni la réponse du bot à une requete
     def repond(self, question):
         query = self.pre_process(question)
         return self.genere_phrase(query)
     
+    #genere itérativement la réponse du modele caractère par caractère
+    #dispose d'une condtion d'arret sur les "finisseurs" de phrase . ! ?
     def genere_phrase(self, start_string):
         input_eval = [self.char2idx[s] for s in start_string]
         input_eval = tf.expand_dims(input_eval, 0)
@@ -60,6 +69,7 @@ class botGeneral:
             input_eval = tf.expand_dims([predicted_id], 0)
     
             text_generated.append(self.idx2char[predicted_id])
+            #condtion de fin de pharse (ne prend pas en compte le ... pour le moment)
             if self.idx2char[predicted_id] in ['.','?','!']:
                 break
     
