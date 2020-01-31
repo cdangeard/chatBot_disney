@@ -4,7 +4,7 @@ Created on Sat Jan 25 00:26:01 2020
 
 @author: Drimer
 """
-from disneyBot import disneyChatBot
+from classes.disneyBot import disneyChatBot
 
 bot = disneyChatBot()
 print('Bonjour')

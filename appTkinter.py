@@ -1,18 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 24 23:13:41 2020
-
-@author: Drimer
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 24 15:52:48 2020
-
-@author: Drimer
-"""
 import tkinter
-from disneyBot import disneyChatBot
+from classes.disneyBot import disneyChatBot
 
 def decoupeuse(string, size):
     split = string.split(' ')

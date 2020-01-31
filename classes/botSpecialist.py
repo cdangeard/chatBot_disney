@@ -18,10 +18,10 @@ def buildVectorizer():
                             use_idf=True, smooth_idf=True, # idf lissé
                             sublinear_tf=False, norm='l2')
 
-
 class botSpecialist:
     
-    def __init__(self, dialogueFilename='train_data.csv', seuil = 0.5, randomSeuil = 0.01):
+    def __init__(self, dialogueFilename='data/train_data.csv', seuil = 0.5, 
+                 randomSeuil = 0.01):
         self.vectorizer = buildVectorizer()
         self.nlp = spacy.load("fr_core_news_sm")
         self.stemmer = SnowballStemmer('french')

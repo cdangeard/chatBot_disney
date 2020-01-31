@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from botSpecialist import botSpecialist
-
-class botGeneral:
-    def __init__(self):
-        pass
-    
-    def repond(self,q):
-        return 'bitch'
+from classes.botSpecialist import botSpecialist
+from classes.botGeneral import botGeneral
 
 class disneyChatBot:
     
